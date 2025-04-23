@@ -1,0 +1,3 @@
+/Users/qiliu/CLionProjects/kernel/cmake-build-debug/CMakeFiles/untitled.dir
+/Users/qiliu/CLionProjects/kernel/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/qiliu/CLionProjects/kernel/cmake-build-debug/CMakeFiles/rebuild_cache.dir
