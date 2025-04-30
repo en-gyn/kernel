@@ -17,8 +17,6 @@ mov cx,0
 mov dx,184fh
 
 int 10h
-
-mov byte [gs:0x00],'1'
 mov byte [gs:0x01],0xA4
 
 mov byte [gs:0x02],' '
@@ -35,22 +33,22 @@ mov byte [gs:0x09],0xA4
 
 mov eax,LOADER_BASE_SECTOR
 mov bx,LOADER_BASE_ADDR
-mov cx,0x01
+mov cx,4
 call rd_risk
-
-jmp LOADER_BASE_ADDR
 
 
 rd_risk:
    ;sector_count
     mov esi,eax
+    mov di,cx
+
     mov al,cl
     mov dx,sector_count
     out dx,al
     ;low
     mov eax,esi
-    mov di,cx
-    mov cx,0x8
+
+    mov cl,8
     mov dx,lba_low
     out dx,al
     ;mid
@@ -63,15 +61,17 @@ rd_risk:
     out dx,al
     ;device
     shr eax,cl
-    or al,0xf0
+    or al,0xe0
     mov dx,device
     out dx,al
     ;commond
-    mov eax,0x20
+    mov al,0x20
     mov dx,commond
     out dx,al
 
 .not_on_ready:
+
+    nop
     mov dx,status
     in al,dx
     and al,0x88
@@ -79,18 +79,19 @@ rd_risk:
     jnz .not_on_ready
 
     mov ax,di
-    mov dx,$256
+    mov dx,256
     mul dx
 
     mov cx,ax
+    mov dx,data
 .go_on_ready:
+
     in ax,dx
-    mov bx,LOADER_BASE_ADDR
     mov [bx],ax
     add bx,2
     loop .go_on_ready
 
-    ret
+jmp LOADER_BASE_ADDR
 
 
 times 510-($-$$) db 0
